@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:football_shop/menu.dart';
+import 'package:football_shop/screens/menu.dart';
+import 'package:football_shop/screens/productslist_form.dart';
 
 void main() {
   runApp(const FootballShopApp());
@@ -19,6 +20,10 @@ class FootballShopApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: MyHomePage(),
+      routes: {
+        '/add-product': (context) => const AddProductFormPage(),
+        '/home': (context) => MyHomePage(),
+      },
     );
   }
 }

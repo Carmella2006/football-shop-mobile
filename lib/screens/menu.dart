@@ -23,30 +23,72 @@ class MyHomePage extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.blue),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Football Shop',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'All the best football products are here!',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/home');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.add_box_outlined),
+              title: const Text('Add Product'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/add-product');
+              },
+            ),
+          ],
+        ),
+      ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Row untuk kartu info
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InfoCard(title: 'NPM', content: npm),
-                InfoCard(title: 'Nama', content: nama),
-                InfoCard(title: 'Kelas', content: kelas),
+                InfoCard(title: 'Name', content: nama),
+                InfoCard(title: 'Class', content: kelas),
               ],
             ),
             const SizedBox(height: 24.0),
 
             const Text(
-              "Selamat datang di Football Shop!",
+              "Welcome to Football Shop!",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
 
             const SizedBox(height: 24.0),
 
-            // Grid untuk tombol
             GridView.count(
               primary: true,
               padding: const EdgeInsets.all(10),
@@ -65,7 +107,6 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-// Kartu informasi user
 class InfoCard extends StatelessWidget {
   final String title;
   final String content;
@@ -91,7 +132,6 @@ class InfoCard extends StatelessWidget {
   }
 }
 
-// Model untuk item homepage
 class ItemHomepage {
   final String name;
   final IconData icon;
@@ -100,7 +140,6 @@ class ItemHomepage {
   ItemHomepage(this.name, this.icon, this.color);
 }
 
-// Card tombol
 class ItemCard extends StatelessWidget {
   final ItemHomepage item;
   const ItemCard(this.item, {super.key});
@@ -112,13 +151,15 @@ class ItemCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: () {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text("Kamu telah menekan tombol ${item.name}!"),
-              ),
-            );
+          if (item.name == "Create Product") {
+            Navigator.pushNamed(context, '/add-product');
+          } else {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(content: Text("Kamu menekan tombol ${item.name}!")),
+              );
+          }
         },
         child: Container(
           padding: const EdgeInsets.all(12),
