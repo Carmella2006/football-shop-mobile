@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures, unused_field
+
 import 'package:flutter/material.dart';
 import 'package:football_shop/widgets/left_drawer.dart';
 
@@ -32,7 +34,7 @@ class _AddProductFormPageState extends State<AddProductFormPage> {
         title: const Text("Create New Product"),
         backgroundColor: Colors.blue,
       ),
-      drawer: const LeftDrawer(), // ✅ pakai drawer yang benar
+      drawer: const LeftDrawer(),
 
       body: Form(
         key: _formKey,
