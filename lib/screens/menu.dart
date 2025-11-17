@@ -9,9 +9,9 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "A";
 
   final List<ItemHomepage> items = [
-    ItemHomepage("All Products", Icons.shopping_bag, Colors.blue),
-    ItemHomepage("My Products", Icons.list, Colors.green),
-    ItemHomepage("Create Product", Icons.add_box, Colors.red),
+    ItemHomepage("See Products", Icons.shopping_cart),
+    ItemHomepage("Add Product", Icons.add_box),
+    ItemHomepage("Logout", Icons.logout),
   ];
 
   @override
@@ -24,7 +24,9 @@ class MyHomePage extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+
       drawer: const LeftDrawer(),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -38,25 +40,23 @@ class MyHomePage extends StatelessWidget {
                 InfoCard(title: 'Class', content: kelas),
               ],
             ),
-            const SizedBox(height: 24.0),
+
+            const SizedBox(height: 16),
 
             const Text(
-              "Welcome to Football Shop!",
+              'Welcome to Football Shop!',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
 
-            const SizedBox(height: 24.0),
+            const SizedBox(height: 20),
 
-            GridView.count(
-              primary: true,
-              padding: const EdgeInsets.all(10),
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              children: items.map((item) {
-                return ItemCard(item);
-              }).toList(),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 3,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                children: items.map((item) => ItemCard(item)).toList(),
+              ),
             ),
           ],
         ),
@@ -74,15 +74,21 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3.0,
-      child: Container(
-        width: MediaQuery.of(context).size.width / 3.5,
-        padding: const EdgeInsets.all(16.0),
+      color: Colors.white,
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8.0),
-            Text(content),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            Text(content, style: const TextStyle(color: Colors.black)),
           ],
         ),
       ),
@@ -93,48 +99,50 @@ class InfoCard extends StatelessWidget {
 class ItemHomepage {
   final String name;
   final IconData icon;
-  final Color color;
 
-  ItemHomepage(this.name, this.icon, this.color);
+  ItemHomepage(this.name, this.icon);
 }
 
 class ItemCard extends StatelessWidget {
   final ItemHomepage item;
+
   const ItemCard(this.item, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: item.color,
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
+    return InkWell(
+      onTap: () {
+        if (item.name == "See Products") {
+          Navigator.pushNamed(context, '/products-list');
+        } else if (item.name == "Add Product") {
+          Navigator.pushNamed(context, '/add-product');
+        } else if (item.name == "Logout") {
+          Navigator.pushNamed(context, '/login');
+        }
+      },
       borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        onTap: () {
-          if (item.name == "Create Product") {
-            Navigator.pushNamed(context, '/add-product');
-          } else {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(content: Text("Kamu menekan tombol ${item.name}!")),
-              );
-          }
-        },
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(item.icon, color: Colors.white, size: 30.0),
-                const SizedBox(height: 8),
-                Text(
-                  item.name,
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+      child: Container(
+        decoration: BoxDecoration(
+          color: primaryColor.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: primaryColor, width: 1),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(item.icon, size: 40, color: primaryColor),
+            const SizedBox(height: 10),
+            Text(
+              item.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: primaryColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
